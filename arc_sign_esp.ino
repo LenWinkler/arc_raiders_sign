@@ -2,6 +2,7 @@ constexpr int RED_LED = 0;
 constexpr int YELLOW_LED = 1;
 constexpr int GREEN_LED = 2;
 constexpr int BLUE_LED = 3;
+constexpr int EXTRA_LED = 6;
 constexpr int SW = 10;
 constexpr int CLK = 20;
 constexpr int DT = 21;
@@ -22,9 +23,11 @@ void setup() {
   pinMode(YELLOW_LED, OUTPUT);
   pinMode(GREEN_LED, OUTPUT);
   pinMode(BLUE_LED, OUTPUT);
+  pinMode(EXTRA_LED, OUTPUT);
 
   lastStateCLK = digitalRead(CLK);
   set_duty_cycles(lastDutyCycle);
+  analogWrite(EXTRA_LED, 32);
 }
 
 void loop() {
