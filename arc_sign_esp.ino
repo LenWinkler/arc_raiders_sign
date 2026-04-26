@@ -1,6 +1,3 @@
-#include <array>
-#include <string>
-
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SH110X.h>
@@ -8,11 +5,10 @@
 #include <Pushbutton.h>
 #include "qr_bitmap.h"
 
-#define SCREEN_WIDTH 128
-#define SCREEN_HEIGHT 32
-#define OLED_SDA 8
-#define OLED_SCL 9
-
+constexpr int SCREEN_WIDTH = 128;
+constexpr int SCREEN_HEIGHT = 32;
+constexpr int OLED_SDA = 8;
+constexpr int OLED_SCL = 9;
 constexpr int RESTART_BUTTON = 0;
 constexpr int RED_LED = 1;
 constexpr int YELLOW_LED = 2;
