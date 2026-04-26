@@ -1,4 +1,3 @@
-#pragma once
 #include <pgmspace.h>
 
 #define QR_WIDTH 58
