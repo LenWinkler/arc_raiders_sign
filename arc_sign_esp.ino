@@ -1,21 +1,23 @@
 #include <array>
 #include <string>
-#include "qr_bitmap.h"
 
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SH110X.h>
 #include <Fonts/TomThumb.h>
+#include <Pushbutton.h>
+#include "qr_bitmap.h"
 
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 32
 #define OLED_SDA 8
 #define OLED_SCL 9
 
-constexpr int RED_LED = 0;
-constexpr int YELLOW_LED = 1;
-constexpr int GREEN_LED = 2;
-constexpr int BLUE_LED = 3;
+constexpr int RESTART_BUTTON = 0;
+constexpr int RED_LED = 1;
+constexpr int YELLOW_LED = 2;
+constexpr int GREEN_LED = 3;
+constexpr int BLUE_LED = 4;
 constexpr int SW = 10;
 constexpr int CLK = 20;
 constexpr int DT = 21;
@@ -73,7 +75,6 @@ void setup() {
     delay(random(500, 750));
   }
 
-  // QR code
   display.clearDisplay();
   display.fillRect(35, 3, QR_WIDTH, QR_HEIGHT, SH110X_WHITE);
   display.drawXBitmap(35, 3, qr_bitmap, QR_WIDTH, QR_HEIGHT, SH110X_BLACK);
@@ -88,16 +89,17 @@ void setup() {
   pinMode(GREEN_LED, OUTPUT);
   pinMode(BLUE_LED, OUTPUT);
 
+  pinMode(RESTART_BUTTON, INPUT_PULLUP);
+
   lastStateCLK = digitalRead(CLK);
   set_duty_cycles(lastDutyCycle);
 }
 
 void loop() {
-  if (light_on == false) {
-    analogWrite(RED_LED, 0);
-    analogWrite(YELLOW_LED, 0);
-    analogWrite(GREEN_LED, 0);
-    analogWrite(BLUE_LED, 0);
+  if (digitalRead(RESTART_BUTTON) == LOW){
+    set_duty_cycles(0);
+    lastDutyCycle = 255;
+    esp_restart();
   }
 
   if (light_on == true) {
@@ -134,6 +136,8 @@ void loop() {
       light_on = !light_on;
       if (light_on == true) {
         set_duty_cycles(lastDutyCycle);
+      } else {
+        set_duty_cycles(0);
       }
     }
 
@@ -150,9 +154,3 @@ void set_duty_cycles(int duty_cycle) {
   analogWrite(BLUE_LED, duty_cycle);
   delay(5);
 }
-
-
-
-
-
-
